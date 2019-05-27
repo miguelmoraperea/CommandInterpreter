@@ -13,14 +13,14 @@
 
 typedef struct {
 	char * name;
-	void (*fptr)(char ** args);
+	void (*fptr)(char ** args, int numOfArgs);
 } command_t;
 
 #define NUM_OF_COMMANDS 2
 
 extern command_t commands_list[];
 
-void help(char ** args);
-void version(char ** args);
+void help(char ** args, int numOfArgs);
+void version(char ** args, int numOfArgs);
 
 #endif /* COMMANDSLIST_H_ */

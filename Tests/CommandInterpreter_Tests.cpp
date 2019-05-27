@@ -44,7 +44,6 @@ TEST(CommandInterpreter, InitializeWithNull)
 	{
 		STRCMP_EQUAL(NULL, args[i]);
 	}
-
 }
 
 TEST(CommandInterpreter, ParseIntoTokens)
@@ -67,13 +66,13 @@ TEST(CommandInterpreter, ParseIntoTokensExtraArguments)
 	CommandInt_handle(testCommand);
 	char **args = CommandInt_getArgs();
 
-	STRCMP_EQUAL(args[0], "command");
-	STRCMP_EQUAL(args[1], "arg1");
-	STRCMP_EQUAL(args[2], "arg2");
-	STRCMP_EQUAL(args[3], "arg3");
-	STRCMP_EQUAL(args[4], "arg4");
-	STRCMP_EQUAL(args[5], "arg5");
-	STRCMP_EQUAL(args[6], "arg6");
+	STRCMP_EQUAL("command", args[0]);
+	STRCMP_EQUAL("arg1", args[1]);
+	STRCMP_EQUAL("arg2", args[2]);
+	STRCMP_EQUAL("arg3", args[3]);
+	STRCMP_EQUAL("arg4", args[4]);
+	STRCMP_EQUAL("arg5", args[5]);
+	STRCMP_EQUAL("arg6", args[6]);
 }
 
 TEST(CommandInterpreter, CleanArgsOnEachCommand)
@@ -82,25 +81,25 @@ TEST(CommandInterpreter, CleanArgsOnEachCommand)
 	CommandInt_handle(testCommand);
 	char **args = CommandInt_getArgs();
 
-	STRCMP_EQUAL(args[0], "command");
-	STRCMP_EQUAL(args[1], "arg1");
-	STRCMP_EQUAL(args[2], "arg2");
-	STRCMP_EQUAL(args[3], "arg3");
-	STRCMP_EQUAL(args[4], "arg4");
-	STRCMP_EQUAL(args[5], "arg5");
-	STRCMP_EQUAL(args[6], "arg6");
+	STRCMP_EQUAL("command", args[0]);
+	STRCMP_EQUAL("arg1", args[1]);
+	STRCMP_EQUAL("arg2", args[2]);
+	STRCMP_EQUAL("arg3", args[3]);
+	STRCMP_EQUAL("arg4", args[4]);
+	STRCMP_EQUAL("arg5", args[5]);
+	STRCMP_EQUAL("arg6", args[6]);
 
 	char testCommand2[MAX_INPUT_SIZE] = "command2 test1 test2 test3 test4";
 	CommandInt_handle(testCommand2);
-	args = CommandInt_getArgs();
+	char **args2 = CommandInt_getArgs();
 
-	STRCMP_EQUAL(args[0], "command2");
-	STRCMP_EQUAL(args[1], "test1");
-	STRCMP_EQUAL(args[2], "test2");
-	STRCMP_EQUAL(args[3], "test3");
-	STRCMP_EQUAL(args[4], "test4");
-	STRCMP_EQUAL(args[5], NULL);
-	STRCMP_EQUAL(args[6], NULL);
+	STRCMP_EQUAL("command2", args2[0]);	
+	STRCMP_EQUAL("test1", args2[1]);	
+	STRCMP_EQUAL("test2", args2[2]);	
+	STRCMP_EQUAL("test3", args2[3]);	
+	STRCMP_EQUAL("test4", args2[4]);	
+	STRCMP_EQUAL(NULL, args2[5]);	
+	STRCMP_EQUAL(NULL, args2[6]);	
 }
 
 TEST(CommandInterpreter, AcceptIfCommandExists)
@@ -120,4 +119,3 @@ TEST(CommandInterpreter, RejectIfCommandDoesNotExists)
 	char testCommand2[MAX_INPUT_SIZE] = "versions";
 	LONGS_EQUAL(ERROR, CommandInt_handle(testCommand2));
 }
-

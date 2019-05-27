@@ -16,15 +16,16 @@
 #include "Mocks_Commands.h"
 
 #define TOK_DELIM 			" \t\r\n\a"
-
 #define MAX_NUM_OF_ARGS		4
 
 static char **args;
-static int command_index;
+static int numOfArgs = -1;
+static int command_index = -1;
 
 static void freeArgs(void)
 {
 	free(args);
+	numOfArgs = 0;
 }
 
 static ci_result_t parseIntoArgs(char * inputLine)
@@ -32,7 +33,7 @@ static ci_result_t parseIntoArgs(char * inputLine)
 	freeArgs();
 
 	int argsBufferSize = MAX_NUM_OF_ARGS;
-	args = (char **)malloc((unsigned)argsBufferSize * sizeof(char *));
+	args = (char **)calloc(argsBufferSize, sizeof(char *));
 
 	char *token = strtok(inputLine, TOK_DELIM);
 
@@ -42,7 +43,7 @@ static ci_result_t parseIntoArgs(char * inputLine)
 	}
 
 	int i = 0;
-	args[i] = (char *)malloc((strlen(token) + 1) * sizeof(char));
+	args[i] = (char *)calloc((strlen(token) + 1), sizeof(char));
 	memmove(args[i], token, strlen(token) + 1);
 	i++;
 
@@ -52,19 +53,21 @@ static ci_result_t parseIntoArgs(char * inputLine)
 
 		if (token != NULL)
 		{
-			if (i >= argsBufferSize)
+			if (i >= argsBufferSize - 1)
 			{
 				argsBufferSize += MAX_NUM_OF_ARGS;
 				args = (char **)realloc(args, (unsigned)argsBufferSize *
 															sizeof(char *));
 			}
 
-			args[i] = (char *)malloc((strlen(token) + 1) * sizeof(char));
+			args[i] = (char *)calloc((strlen(token) + 1), sizeof(char));
 			memmove(args[i], token, strlen(token) + 1);
 			i++;
 		}
 
 	} while (token != NULL);
+
+	numOfArgs = i - 1;
 
 	return SUCCESS;
 }
@@ -93,7 +96,7 @@ ci_result_t CommandInt_init(void)
 {
 	freeArgs();
 
-	args = (char **)malloc((unsigned)MAX_NUM_OF_ARGS * sizeof(char *));
+	args = (char **)calloc((unsigned)MAX_NUM_OF_ARGS, sizeof(char *));
 
 	if (args == NULL)
 	{
@@ -129,13 +132,12 @@ static ci_result_t CommandInt_IsValidCommand(void)
 
 ci_result_t executeCommand(void)
 {
-
 	if (command_index < 0 || command_index >= NUM_OF_COMMANDS)
 	{
 		return ERROR;
 	}
 
-	commands_list[command_index].fptr(args);
+	commands_list[command_index].fptr(args, numOfArgs);
 
 	return SUCCESS;
 }
@@ -154,4 +156,3 @@ ci_result_t CommandInt_handle(char * inputLine)
 
 	return executeCommand();
 }
-

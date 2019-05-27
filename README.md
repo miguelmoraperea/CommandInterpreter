@@ -1,3 +1,4 @@
+
 # Command Interpreter
 
 #### Who would use this?
@@ -25,4 +26,11 @@ This implementation can be compiled into any microcontroller using the appropria
 #### How to use it?
 Copy the _**inc**_ and _**src**_ folders to the project you wish to add this functionality on. Make sure to inform your compiler about the location of the new folders.
 
+
+## Block Diagram
 <img src="images/Command_Interpreter_Block_Diagram.JPG" width = "300">
+
+## Examples
+<img src="images/help_command.JPG" width = "500">
+
+<img src="images/version_command_with_arguments.JPG" width = "500">
