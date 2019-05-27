@@ -11,17 +11,19 @@
 #include <stdio.h>
 #include "CommandInterpreter.h"
 
+#define MAX_SIZE_OF_INPUT_LINE	128
+
 int main(void)
 {
-	char inputLine[30];
+	char userInputLine[MAX_SIZE_OF_INPUT_LINE];
 
 	CommandInt_init();
 
 	while(1)
 	{
 		printf("> ");
-		gets(inputLine);
-		CommandInt_handle(inputLine);
+		gets(userInputLine);
+		CommandInt_handle(userInputLine);
 	}
 
 	return 0;
