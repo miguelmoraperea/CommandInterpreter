@@ -24,3 +24,5 @@ This implementation can be compiled into any microcontroller using the appropria
 
 #### How to use it?
 Copy the _**inc**_ and _**src**_ folders to the project you wish to add this functionality on. Make sure to inform your compiler about the location of the new folders.
+
+<img src="images/Command_Interpreter_Block_Diagram.JPG" width = "300">
