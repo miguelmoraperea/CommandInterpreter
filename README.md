@@ -1,5 +1,6 @@
-
 # Command Interpreter
+
+[![Build Status](https://travis-ci.org/miguelmoraperea/CommandInterpreter.svg?branch=master)](https://travis-ci.org/miguelmoraperea/CommandInterpreter)
 
 #### Who would use this?
 This project is designed for embedded software engineers working in C language.
