@@ -359,6 +359,8 @@
                     					
                     <sourceEntries>
                         						
+                        <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="TDD"/>
+                        						
                         <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Tests"/>
                         						
                         <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="lib"/>
