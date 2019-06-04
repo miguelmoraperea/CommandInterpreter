@@ -98,8 +98,6 @@ TEST(CommandInterpreter, CleanArgsOnEachCommand)
 	STRCMP_EQUAL("test2", args2[2]);	
 	STRCMP_EQUAL("test3", args2[3]);	
 	STRCMP_EQUAL("test4", args2[4]);	
-	STRCMP_EQUAL(NULL, args2[5]);	
-	STRCMP_EQUAL(NULL, args2[6]);	
 }
 
 TEST(CommandInterpreter, AcceptIfCommandExists)

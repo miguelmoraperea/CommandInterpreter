@@ -1,6 +1,7 @@
 # Command Interpreter
 
 [![Build Status](https://travis-ci.org/miguelmoraperea/CommandInterpreter.svg?branch=master)](https://travis-ci.org/miguelmoraperea/CommandInterpreter)
+[![codecov](https://codecov.io/gh/miguelmoraperea/CommandInterpreter/branch/master/graph/badge.svg)](https://codecov.io/gh/miguelmoraperea/CommandInterpreter)
 
 #### Who would use this?
 This project is designed for embedded software engineers working in C language.
