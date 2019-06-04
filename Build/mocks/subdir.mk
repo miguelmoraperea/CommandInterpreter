@@ -16,8 +16,8 @@ C_DEPS += \
 # Each subdirectory must supply rules for building sources it contributes
 mocks/%.o: ../mocks/%.c
 	@echo 'Building file: $<'
-	@echo 'Invoking: Cygwin C Compiler'
-	gcc -std=c99 -I"$(dir $(abspath $(CURDIR)))inc" -I"$(dir $(abspath $(CURDIR)))mocks" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I"$(dir $(abspath $(CURDIR)))inc" -I"$(dir $(abspath $(CURDIR)))mocks" -O0 -g3 -ftest-coverage -fprofile-arcs -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

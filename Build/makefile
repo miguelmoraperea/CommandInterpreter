@@ -44,14 +44,14 @@ all: CommandInterpreter.exe
 # Tool invocations
 CommandInterpreter.exe: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: Cygwin C++ Linker'
-	g++  -o "CommandInterpreter.exe" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Invoking: GCC C++ Linker'
+	g++ -ftest-coverage -fprofile-arcs -o "CommandInterpreter.exe" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) CommandInterpreter.exe
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) CommandInterpreter.exe
 	-@echo ' '
 
 .PHONY: all clean dependents
