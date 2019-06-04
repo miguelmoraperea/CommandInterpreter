@@ -9,7 +9,6 @@ env:
 script:
    - cd Build
    - make
-   - ./CommandInterpreter.exe
    - cd ..
    - cd TDD
    - make
