@@ -13,11 +13,12 @@
 #define COMMANDINTERPRETER_H_
 
 typedef enum {
-	ERROR = -1, SUCCESS = 1
+    ERROR = -1, SUCCESS = 1
 } ci_result_t;
 
-ci_result_t CommandInt_init(void);
-char ** CommandInt_getArgs(void);
-ci_result_t CommandInt_handle(char * inputLine);
+void CommandInt_Init(void);
+void CommandInt_Destroy(void);
+char **CommandInt_GetArgs(void);
+ci_result_t CommandInt_Handle(char * inputLine);
 
 #endif /* COMMANDINTERPRETER_H_ */

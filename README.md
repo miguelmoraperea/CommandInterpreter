@@ -9,12 +9,12 @@ This project is designed for embedded software engineers working in C language.
 #### What does it do?
 This project contains a module that handles input commands from the user, implementing the following tasks:
 
--	Initialize the command interpreter
--	Parse an incoming line into arguments
--	Validate the command from a list of pre-defined commands
--	Execute the command 
--	Pass the parsed arguments to the command being executed
--	Free the command arguments memory
+-   Initialize the command interpreter
+-   Parse an incoming line into arguments
+-   Validate the command from a list of pre-defined commands
+-   Execute the command
+-   Pass the parsed arguments to the command being executed
+-   Free the command arguments memory
 
 #### Why is this implementation good?
 This implementation was developed using TDD, hence it includes all tests needed to confirm the correct functionality.

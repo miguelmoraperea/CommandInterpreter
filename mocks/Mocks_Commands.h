@@ -11,12 +11,12 @@
 #ifndef COMMANDSLIST_H_
 #define COMMANDSLIST_H_
 
-typedef struct {
-	char * name;
-	void (*fptr)(char ** args, int numOfArgs);
-} command_t;
-
 #define NUM_OF_COMMANDS 2
+
+typedef struct {
+    char * name;
+    void (*fptr)(char ** args, int numOfArgs);
+} command_t;
 
 extern command_t commands_list[];
 

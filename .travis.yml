@@ -4,15 +4,17 @@ compiler: gcc
 
 env:
   global:
-    - CODECOV_TOKEN="4a28ff84-cec0-420e-b530-f2a36e082cd9"  
+    - CODECOV_TOKEN="4a28ff84-cec0-420e-b530-f2a36e082cd9"
+
+before_script:
+    - cd lib/cpputest
+    - autoreconf . -i
+    - ./configure
+    - make tdd
 
 script:
-   - cd Build
-   - make
-   - cd ..
-   - cd TDD
-   - make
-   - ./CommandInterpreter.exe
-  
+    - cd ../..
+    - make
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)

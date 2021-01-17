@@ -9,150 +9,149 @@
 *
 *****************************************************************************/
 
-#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "CommandInterpreter.h"
 #include "Mocks_Commands.h"
 
-#define TOK_DELIM 			" \t\r\n\a"
-#define MAX_NUM_OF_ARGS		4
+#define TOK_DELIM           " \t\r\n\a"
+#define MAX_NUM_OF_ARGS     4
 
 static char **args;
+static int argsBufferSize = -1;
 static int numOfArgs = -1;
-static int command_index = -1;
+static int usedArgs = 0;
 
-static void freeArgs(void)
+
+static int CommandInt_IsValidCommand(void)
 {
-	free(args);
-	numOfArgs = 0;
+    for (int i = 0; i < NUM_OF_COMMANDS; ++i)
+    {
+        if (strcmp(args[0], commands_list[i].name) == 0)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
-static ci_result_t parseIntoArgs(char * inputLine)
+static void *Allocate(int numOfElements, size_t sizeOfElement)
 {
-	freeArgs();
+    void *ptr = (void *)calloc(numOfElements, sizeOfElement);
 
-	int argsBufferSize = MAX_NUM_OF_ARGS;
-	args = (char **)calloc(argsBufferSize, sizeof(char *));
+    if (ptr == NULL )
+    {
+        printf("Error allocating memory");
+        exit(1);
+    }
 
-	char *token = strtok(inputLine, TOK_DELIM);
-
-	if (token == NULL )
-	{
-		return ERROR;
-	}
-
-	int i = 0;
-	args[i] = (char *)calloc((strlen(token) + 1), sizeof(char));
-	memmove(args[i], token, strlen(token) + 1);
-	i++;
-
-	do
-	{
-		token = strtok(NULL, TOK_DELIM);
-
-		if (token != NULL)
-		{
-			if (i >= argsBufferSize - 1)
-			{
-				argsBufferSize += MAX_NUM_OF_ARGS;
-				args = (char **)realloc(args, (unsigned)argsBufferSize *
-															sizeof(char *));
-			}
-
-			args[i] = (char *)calloc((strlen(token) + 1), sizeof(char));
-			memmove(args[i], token, strlen(token) + 1);
-			i++;
-		}
-
-	} while (token != NULL);
-
-	numOfArgs = i - 1;
-
-	return SUCCESS;
+    return ptr;
 }
 
-static ci_result_t compareArrays(char * aArray, char * bArray)
+
+static ci_result_t ParseIntoArgs(char * inputLine)
 {
-	int i;
+    CommandInt_Destroy();
 
-	for (i = 0; aArray[i] != '\0' && bArray[i] != '\0'; i++)
-	{
-		if (aArray[i] != bArray[i])
-		{
-			return ERROR;
-		}
-	}
+    argsBufferSize = MAX_NUM_OF_ARGS;
+    args = (char **)Allocate(argsBufferSize, sizeof(char *));
 
-	if (aArray[i] != bArray[i])
-	{
-		return ERROR;
-	}
+    char *token = strtok(inputLine, TOK_DELIM);
 
-	return SUCCESS;
+    if (token == NULL )
+    {
+        return ERROR;
+    }
+
+    int i = 0;
+    args[i] = (char *)Allocate((strlen(token) + 1), sizeof(char));
+    memmove(args[i], token, strlen(token) + 1);
+    usedArgs++;
+    i++;
+
+    do
+    {
+        token = strtok(NULL, TOK_DELIM);
+
+        if (token != NULL)
+        {
+            if (i >= argsBufferSize - 1)
+            {
+                argsBufferSize += MAX_NUM_OF_ARGS;
+                args = (char **)realloc(args, (unsigned)argsBufferSize * sizeof(char *));
+
+                if (args == NULL )
+                {
+                    return ERROR;
+                }
+            }
+
+            args[i] = (char *)Allocate((strlen(token) + 1), sizeof(char));
+            memmove(args[i], token, strlen(token) + 1);
+            usedArgs++;
+            i++;
+        }
+
+    } while (token != NULL);
+
+    numOfArgs = i - 1;
+
+    return SUCCESS;
 }
 
-ci_result_t CommandInt_init(void)
+ci_result_t ExecuteCommand(int commandIndex)
 {
-	freeArgs();
+    if (commandIndex < 0 || commandIndex >= NUM_OF_COMMANDS)
+    {
+        return ERROR;
+    }
 
-	args = (char **)calloc((unsigned)MAX_NUM_OF_ARGS, sizeof(char *));
+    commands_list[commandIndex].fptr(args, numOfArgs);
 
-	if (args == NULL)
-	{
-		return ERROR;
-	}
-
-	for (int i = 0; i < MAX_NUM_OF_ARGS; i++)
-	{
-		args[i] = NULL;
-	}
-
-	return SUCCESS;
+    return SUCCESS;
 }
 
-char ** CommandInt_getArgs(void)
+void CommandInt_Init(void)
 {
-	return args;
+    argsBufferSize = MAX_NUM_OF_ARGS;
+    args = (char **)Allocate((unsigned)argsBufferSize, sizeof(char *));
 }
 
-static ci_result_t CommandInt_IsValidCommand(void)
+void CommandInt_Destroy(void)
 {
-	for (int i = 0; i < NUM_OF_COMMANDS; i++)
-	{
-		if (compareArrays(args[0], commands_list[i].name) == SUCCESS)
-		{
-			command_index = i;
-			return SUCCESS;
-		}
-	}
+    for (int i = 0; i < usedArgs; ++i)
+    {
+        free(args[i]);
+    }
 
-	return ERROR;
+    free(args);
+    numOfArgs = 0;
+    usedArgs = 0;
 }
 
-ci_result_t executeCommand(void)
+char **CommandInt_GetArgs(void)
 {
-	if (command_index < 0 || command_index >= NUM_OF_COMMANDS)
-	{
-		return ERROR;
-	}
-
-	commands_list[command_index].fptr(args, numOfArgs);
-
-	return SUCCESS;
+    return args;
 }
 
-ci_result_t CommandInt_handle(char * inputLine)
+ci_result_t CommandInt_Handle(char * inputLine)
 {
-	if(parseIntoArgs(inputLine) == ERROR)
-	{
-		return ERROR;
-	}
+    if(ParseIntoArgs(inputLine) == ERROR)
+    {
+        return ERROR;
+    }
 
-	if (CommandInt_IsValidCommand() == ERROR)
-	{
-		return ERROR;
-	}
+    int cIndex = CommandInt_IsValidCommand();
 
-	return executeCommand();
+    if (cIndex < 0)
+    {
+        return ERROR;
+    }
+
+    return ExecuteCommand(cIndex);
 }
+
+
